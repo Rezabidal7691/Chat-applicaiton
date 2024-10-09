@@ -1,11 +1,35 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import useSignup from "../hooks/useSignup";
+import { useForm } from "react-hook-form";
 
 function Signup() {
+  const { signup, isLoading } = useSignup();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid },
+  } = useForm({
+    defaultValues: {
+      fullname: "",
+      username: "",
+      password: "",
+    },
+    mode: "onSubmit",
+  });
+  const handleSubmitForm = (data) => {
+    signup(data);
+  };
   return (
     <div className="w-full h-screen flex justify-center items-center">
-      <form className="card bg-base-100 w-96 shadow-xl flex flex-col justify-center items-center gap-y-5 px-10 py-8">
-        <h1 className="mb-5 text-slate-500 text-lg">ثبت نام در <span className="text-primary font-bold text-xl">چتینـــــو</span> </h1>
+      <form
+        onSubmit={handleSubmit(handleSubmitForm)}
+        className="card bg-base-100 w-96 shadow-xl flex flex-col justify-center items-center gap-y-5 px-10 py-8"
+      >
+        <h1 className="mb-5 text-slate-500 text-lg">
+          ثبت نام در{" "}
+          <span className="text-primary font-bold text-xl">چتینـــــو</span>{" "}
+        </h1>
         <label className="w-full input input-bordered flex items-center gap-2 text-sm">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -15,8 +39,27 @@ function Signup() {
           >
             <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM12.735 14c.618 0 1.093-.561.872-1.139a6.002 6.002 0 0 0-11.215 0c-.22.578.254 1.139.872 1.139h9.47Z" />
           </svg>
-          <input type="text" className="grow placeholder:text-slate-500" placeholder="نام کامل" />
+          <input
+            {...register("fullname", {
+              required: {
+                value: true,
+                message: "نام کامل الزامی است",
+              },
+              minLength: {
+                value: 5,
+                message: "نام کامل نباید از 5 کاراکتر کمتر باشد",
+              },
+            })}
+            type="text"
+            className="grow placeholder:text-slate-500"
+            placeholder="نام کامل"
+          />
         </label>
+        {errors?.fullname?.message && (
+          <p className="text-red-500 text-xs  text-start w-full">
+            {errors?.fullname?.message}
+          </p>
+        )}
         <label className="w-full input input-bordered flex items-center gap-2 text-sm">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -26,8 +69,32 @@ function Signup() {
           >
             <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM12.735 14c.618 0 1.093-.561.872-1.139a6.002 6.002 0 0 0-11.215 0c-.22.578.254 1.139.872 1.139h9.47Z" />
           </svg>
-          <input type="text" className="grow placeholder:text-slate-500" placeholder="نام کاربری" />
+          <input
+            {...register("username", {
+              pattern: {
+                value: /^[a-zA-Z0-9_]+$/,
+                message:
+                  "نام کاربری باید فقط دارای حروف و اعداد انگلیسی و _ باشد",
+              },
+              required: {
+                value: true,
+                message: "نام کاربری الزامی است",
+              },
+              minLength: {
+                value: 3,
+                message: "نام کاربری نباید از 3 کاراکتر کمتر باشد",
+              },
+            })}
+            type="text"
+            className="grow placeholder:text-slate-500"
+            placeholder="نام کاربری"
+          />
         </label>
+        {errors?.username?.message && (
+          <p className="text-red-500 text-xs  text-start w-full">
+            {errors?.username?.message}
+          </p>
+        )}
         <label className="w-full input input-bordered flex items-center gap-2 text-sm">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -41,14 +108,44 @@ function Signup() {
               clipRule="evenodd"
             />
           </svg>
-          <input type="password" className="grow placeholder:text-slate-500" placeholder="گذرواژه" />
+          <input
+            {...register("password", {
+              required: {
+                value: true,
+                message: "گذرواژه الزامی است",
+              },
+              minLength: {
+                value: 6,
+                message: "گذرواژه نباید از 6 کاراکتر کمتر باشد",
+              },
+            })}
+            type="password"
+            className="grow placeholder:text-slate-500"
+            placeholder="گذرواژه"
+          />
         </label>
+        {errors?.password?.message && (
+          <p className="text-red-500 text-xs text-start w-full">
+            {errors?.password?.message}
+          </p>
+        )}
         <div className="w-full flex justify-start items-center gap-x-2">
-            <span className="text-gray-500 text-xs">حساب کاربری دارید ؟</span>
-            <Link to='/login' className="text-primary font-bold text-xs" >ورود</Link>
+          <span className="text-gray-500 text-xs">حساب کاربری دارید ؟</span>
+          <Link to="/login" className="text-primary font-bold text-xs">
+            ورود
+          </Link>
         </div>
-        <button className="w-full btn btn-primary text-white">ثبت نام</button>
-        
+        <button
+          disabled={!isValid}
+          className="w-full btn btn-primary text-white"
+        >
+          {isLoading ? (
+            <span className="loading loading-spinner loading-sm"></span>
+          ) : (
+            " ثبت نام"
+          )}
+         
+        </button>
       </form>
     </div>
   );

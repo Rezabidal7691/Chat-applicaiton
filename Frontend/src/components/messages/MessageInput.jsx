@@ -7,7 +7,7 @@ function MessageInput() {
     <input
       type="text"
       className="w-[90%] input input-bordered input-sm  ml-2"
-      placeholder="جستجو"
+      placeholder="پیامی بنویسید ... "
     />
     <button className="btn btn-primary rounded-lg text-xs btn-sm text-white ">
       <BsFillSendFill  />
