@@ -4,6 +4,7 @@ import cookieParser from 'cookie-parser'
 import 'dotenv/config'
 import connectToDB from './Config/connectToDB.js'
 import appRoutes from './Routes/index.js'
+import { pathErrorHandler, responseErrorHandler } from './Middlewares/errorHandler.js'
 
 
 const app = express();
@@ -23,7 +24,8 @@ connectToDB();
 // routes
 app.use('/api' , appRoutes)
 
-
+app.use(pathErrorHandler)
+app.use(responseErrorHandler)
 app.listen(PORT , ()=>{
     console.log(`Server is running on port ${PORT}`);
 })
