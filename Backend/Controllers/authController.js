@@ -70,6 +70,16 @@ class AuthController  {
             next(error)
         }
     }
+    async getCurrentUser (req, res , next){
+        try {
+            const id = req.user._id;
+            const user = await User.findById(id)
+            if(!user) return res.status(401) ;
+            return res.json({status : 'success' , user})
+        } catch (error) {
+            next(error)
+        }
+    }
 }
 
 export default new AuthController()
