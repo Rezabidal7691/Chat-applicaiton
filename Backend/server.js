@@ -5,9 +5,8 @@ import 'dotenv/config'
 import connectToDB from './Config/connectToDB.js'
 import appRoutes from './Routes/index.js'
 import { pathErrorHandler, responseErrorHandler } from './Middlewares/errorHandler.js'
+import {app , io  ,server} from './socket/socket.js'
 
-
-const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json())
@@ -26,6 +25,6 @@ app.use('/api' , appRoutes)
 
 app.use(pathErrorHandler)
 app.use(responseErrorHandler)
-app.listen(PORT , ()=>{
+server.listen(PORT , ()=>{
     console.log(`Server is running on port ${PORT}`);
 })

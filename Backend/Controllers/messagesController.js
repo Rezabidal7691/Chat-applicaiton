@@ -1,7 +1,7 @@
 import Conversation from "../Models/Conversation.js";
 import Message from "../Models/Message.js";
 import User from "../Models/User.js";
-
+import {getReceiverSocketIO, io} from '../socket/socket.js'
 class MessageController{
     async sendMessage (req, res ,next){
         try {
@@ -30,6 +30,12 @@ class MessageController{
             conversation.messages = [...conversation.messages , newMessage]
             await newMessage.save()
             await conversation.save()
+
+            // Socket io
+            const socketReceiverId = getReceiverSocketIO(receiver)
+            if(socketReceiverId){
+                io.to(socketReceiverId).emit('newMessage' , newMessage)
+            }
             res.json({status : 'success' , conversation, newMessage})
         } catch (error) {
             next(error)
