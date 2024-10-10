@@ -39,7 +39,6 @@ class MessageController{
         try {
             const sender = req.user._id;
             const {receiver} = req.params;
-            console.log(sender , receiver);
             const conversation = await Conversation.findOne({participants : {$all : [sender , receiver]}}).populate({path : 'messages'})
             if(!conversation){
                 return res.json([])
