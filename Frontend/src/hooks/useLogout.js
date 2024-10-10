@@ -5,6 +5,7 @@ import { useState } from "react"
 import { useAuthContext } from "../context/AuthContext"
 
 const useLogout = ()=>{
+
     const [isLoading , setIsloading] = useState(false)
     const {setCurrentUser} = useAuthContext() 
     const logout = async ()=>{

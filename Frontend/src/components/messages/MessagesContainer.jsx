@@ -2,12 +2,13 @@ import React from "react";
 import MessagesHeader from "./MessagesHeader";
 import Messages from "./Messages";
 import MessageInput from "./MessageInput";
+import { useSelectedConversation } from "../../context/SelectConversationContext";
 
 function MessagesContainer() {
-  const selectedC = false;
+    const {selectedConversation} = useSelectedConversation()
   return (
     <>
-      {selectedC ? (
+      {selectedConversation ? (
         <div className="w-[70%] h-full overflow-y-auto relative flex flex-col justify-between items-start">
           <MessagesHeader />
           <Messages />
