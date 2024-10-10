@@ -39,14 +39,15 @@ class MessageController{
         try {
             const sender = req.user._id;
             const {receiver} = req.params;
-            const conversation = await Conversation.findOne({participants : {$in : [sender , receiver]}}).populate({path : 'messages'})
-            console.log(conversation);
-            if(conversation.length === 0 ){
+            console.log(sender , receiver);
+            const conversation = await Conversation.findOne({participants : {$all : [sender , receiver]}}).populate({path : 'messages'})
+            if(!conversation){
                 return res.json([])
             }
-            const messages = conversation.messages;
+            const messages = conversation.messages
             return res.json(messages)
         } catch (error) {
+            console.log(error);
             next(error)
         }
     }
